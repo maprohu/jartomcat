@@ -9,6 +9,7 @@ import akka.http.scaladsl.model.ws.BinaryMessage
 import akka.stream.OverflowStrategy
 import akka.stream.scaladsl.{FileIO, Flow, Sink, Source}
 import akka.util.ByteString
+import com.typesafe.scalalogging.StrictLogging
 import jartomcat.shared._
 
 import scala.collection.immutable._
@@ -18,7 +19,7 @@ import scala.concurrent.duration.Duration
 class JarServletWsEndpoint(
   provider: PersistedProvider,
   global: Global
-) extends Endpoint {
+) extends Endpoint with StrictLogging {
 
   override def onOpen(session: Session, config: EndpointConfig): Unit = {
 
@@ -52,6 +53,8 @@ class JarServletWsEndpoint(
           case (Seq(item), source) =>
             item match {
               case v : VerifyJars =>
+                logger.info(s"verifying: ${v}")
+
                 source
                   .via(
                     Flow.fromSinkAndSource(

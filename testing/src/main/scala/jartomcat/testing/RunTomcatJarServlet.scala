@@ -26,7 +26,8 @@ object RunTomcatJarServlet {
       .getJarScanner
       .setJarScanFilter(
         new StandardJarScanFilter {
-          this.setTldSkip("*")
+          setPluggabilitySkip("*")
+          setTldSkip("*")
         }
       )
 
